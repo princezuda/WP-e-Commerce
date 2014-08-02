@@ -180,7 +180,10 @@ function wpsc_admin_category_forms_add() {
 	<?php
 		$category_id = '';
 		if ( isset( $_GET["tag_ID"] ) )
-			$category_id = $_GET["tag_ID"];
+		{
+		 $allowed_protocols = array('http','https');
+			$category_id = absint($_GET["tag_ID"]);
+			}
 
 		$countrylist = WPSC_Countries::get_countries_array( true, true );
 		$selectedCountries = wpsc_get_meta( $category_id, 'target_market', 'wpsc_category' );
@@ -491,7 +494,7 @@ function wpsc_save_category_set( $category_id, $tt_id ) {
 		//Good to here
 		if ( isset( $_POST['tag_ID'] ) ) {
 			//Editing
-			$category_id = $_POST['tag_ID'];
+			$category_id = absint($_POST['tag_ID']);
 			$category = get_term_by( 'id', $category_id, 'wpsc_product_category' );
 			$url_name = $category->slug;
 
@@ -505,8 +508,8 @@ function wpsc_save_category_set( $category_id, $tt_id ) {
 		if ( ! empty( $_POST['height'] ) && is_numeric( $_POST['height'] ) && ! empty( $_POST['width'] ) && is_numeric( $_POST['width'] ) && $image == null ) {
 			$imagedata = wpsc_get_categorymeta( $category_id, 'image' );
 			if ( $imagedata != null ) {
-				$height = $_POST['height'];
-				$width = $_POST['width'];
+				$height = int($_POST['height']);
+				$width = int($_POST['width']);
 				$imagepath = WPSC_CATEGORY_DIR . $imagedata;
 				$image_output = WPSC_CATEGORY_DIR . $imagedata;
 				image_processing( $imagepath, $image_output, $width, $height );
@@ -546,9 +549,9 @@ function wpsc_save_category_set( $category_id, $tt_id ) {
 			$countryList = $wpdb->get_col( "SELECT `id` FROM  `" . WPSC_TABLE_CURRENCY_LIST . "`" );
 
 			if ( $AllSelected != true ){
-				$unselectedCountries = array_diff( $countryList, $_POST['countrylist2'] );
+				$unselectedCountries = array_diff( $countryList, esc_attr($_POST['countrylist2']) );
 				//find the countries that are selected
-				$selectedCountries = array_intersect( $countryList, $_POST['countrylist2'] );
+				$selectedCountries = array_intersect( $countryList, esc_attr($_POST['countrylist2']) );
 				wpsc_update_categorymeta( $category_id, 'target_market', $selectedCountries );
 			}
 
