@@ -108,7 +108,11 @@ class WPSC_Purchase_Log_List_Table extends WP_List_Table {
 
 			// build search term queries for first name, last name, email
 			foreach ( $search_terms as $term ) {
-				$escaped_term = esc_sql( like_escape( $term ) );
+			      global $wpversion;
+				  if($wpversion >= '4.0')
+				$escaped_term = esc_sql( $wpdb->esc_like( $term ) );
+				 if($wpversion < '4.0')
+				 $escaped_term = esc_sql(like_escape($term))
 				if ( ! array_key_exists( $term, $search_sql ) )
 					$search_sql[$term] = array();
 

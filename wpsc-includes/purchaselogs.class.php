@@ -944,9 +944,18 @@ class wpsc_purchaselogs {
    }
 
    function search_purchlog_view( $searchterm ) {
+   
 	  global $wpdb;
-	  $sql = $wpdb->prepare( "SELECT DISTINCT `" . WPSC_TABLE_PURCHASE_LOGS . "` . * FROM `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "` LEFT JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` ON `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "`.`log_id` = `" . WPSC_TABLE_PURCHASE_LOGS . "`.`id` WHERE `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "`.`value` LIKE '%" . like_escape( $searchterm ) . "%' OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`transactid` = %s OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`track_id` LIKE '%" . like_escape( $searchterm )."%'", $searchterm );
-	  $newlogs = $wpdb->get_results( $sql );
+	  global $wpversion;
+$sqlsearchterm = $wpdb->esc_like($searchterm);	
+	
+if($wpversion >= '4.0')
+$sql = $wpdb->prepare( "SELECT DISTINCT `" . WPSC_TABLE_PURCHASE_LOGS . "` . * FROM `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "` LEFT JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` ON `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "`.`log_id` = `" . WPSC_TABLE_PURCHASE_LOGS . "`.`id` WHERE `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "`.`value` LIKE '%" . like_escape( $searchterm ) . "%' OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`transactid` = %s OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`track_id` LIKE %s", $sqlsearchterm, $searchterm );
+if($wpversion < '4.0')
+// backwards compatibility for those who don't upgrade right away so $sqlsearchterm will work. only 4.0 and up supports esc_like()
+$sql = $wpdb->prepare( "SELECT DISTINCT `" . WPSC_TABLE_PURCHASE_LOGS . "` . * FROM `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "` LEFT JOIN `" . WPSC_TABLE_PURCHASE_LOGS . "` ON `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "`.`log_id` = `" . WPSC_TABLE_PURCHASE_LOGS . "`.`id` WHERE `" . WPSC_TABLE_SUBMITTED_FORM_DATA . "`.`value` LIKE '%" . like_escape( $searchterm ) . "%' OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`transactid` = %s OR `" . WPSC_TABLE_PURCHASE_LOGS . "`.`track_id` LIKE '%" . like_escape( $searchterm )."%'", $searchterm );
+
+	 $newlogs = $wpdb->get_results( $sql );
 	  $_SESSION['newlogs'] = $newlogs;
 	  return $newlogs;
    }
