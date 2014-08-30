@@ -180,7 +180,7 @@ function wpsc_admin_category_forms_add() {
 	<?php
 		$category_id = '';
 		if ( isset( $_GET["tag_ID"] ) )
-		$category_id = absint($_GET["tag_ID"]);
+		$category_id = absint( $_GET["tag_ID"] );
 
 		$countrylist = WPSC_Countries::get_countries_array( true, true );
 		$selectedCountries = wpsc_get_meta( $category_id, 'target_market', 'wpsc_category' );

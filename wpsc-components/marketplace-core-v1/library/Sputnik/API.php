@@ -113,7 +113,7 @@ class Sputnik_API {
 			$return_url = Sputnik_Admin::build_url( $args );
 		}
 
-		// Close the authentication popup ?>
+		// Close the authentication popup  ?>
 <!DOCTYPE html><html>
 	<head>
 		<title><?php _e( 'Redirecting ...', 'wpsc' ); ?></title>

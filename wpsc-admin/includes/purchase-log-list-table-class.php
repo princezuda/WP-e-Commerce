@@ -97,7 +97,7 @@ class WPSC_Purchase_Log_List_Table extends WP_List_Table {
 				SELECT SUM(quantity) FROM ' . WPSC_TABLE_CART_CONTENTS . ' AS c
 				WHERE c.purchaseid = p.id
 			) AS item_count';
-
+    
 		$search_terms = empty( $_REQUEST['s'] ) ? array() : explode( ' ', $_REQUEST['s'] );
 		$search_sql = array();
 		foreach ( $checkout_fields as $field ) {
@@ -109,14 +109,10 @@ class WPSC_Purchase_Log_List_Table extends WP_List_Table {
 			// build search term queries for first name, last name, email
 			foreach ( $search_terms as $term ) {
 			      global $wp_version;
-				  if('4.0' >= $wp_version)
-				  {
+				  if('4.0' >= $wp_version )
 				$escaped_term = esc_sql( $wpdb->esc_like( $term ) );
-				 }
 				 else
-				 {
-				 $escaped_term = esc_sql(like_escape($term));
-				 }
+				 $escaped_term = esc_sql( like_escape( $term ) );
 				if ( ! array_key_exists( $term, $search_sql ) )
 					$search_sql[$term] = array();
 
@@ -160,7 +156,7 @@ class WPSC_Purchase_Log_List_Table extends WP_List_Table {
 		$this->where = apply_filters( 'wpsc_manage_purchase_logs_where'  , implode( ' AND ', $where ) );
 
 		$limit = ( $this->per_page !== 0 ) ? "LIMIT {$offset}, {$this->per_page}" : '';
-
+        $allowed_protocols = array( 'http','https' );
 		$orderby = empty( $_REQUEST['orderby'] ) ? 'p.id' : 'p.' . $_REQUEST['orderby'];
 		$order   = empty( $_REQUEST['order'] ) ? 'DESC' : $_REQUEST['order'];
 
