@@ -154,7 +154,7 @@ if ( _wpsc_doing_customer_meta_ajax() ) {
 			_wpsc_doing_it_wrong( __FUNCTION__, __( 'missing meta key', 'wpsc' ), '3.8.14' );
 		}
 
-		$response = _wpsc_add_customer_meta_to_response( $response );
+		$response = _wpsc_add_customer_meta_to_response( esc_html($response) );
 		wp_send_json_success( $response );
 	}
 
