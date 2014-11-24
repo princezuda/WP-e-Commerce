@@ -260,10 +260,11 @@ function wpsc_user_details() {
 function wpsc_product_search_url( $url ) {
 	_wpsc_deprecated_function( __FUNCTION__, '3.8' );
 	if ( isset( $_GET['product_search'] ) ) {
+		$allowed_protocols = array('http','https');
 		if ( strrpos( $url, '?') ) {
-			$url .= '&product_search=' . $_GET['product_search'];
+			$url .= '&product_search=' . wp_kses($_GET['product_search'],$allowed_html,$allowed_protocols);
 		} else {
-			$url .= '?product_search=' . $_GET['product_search'];
+			$url .= '&product_search=' . wp_kses($_GET['product_search'],$allowed_html,$allowed_protocols);
 		}
 	}
 
@@ -669,7 +670,10 @@ function wpsc_the_purch_status_id() {
  */
 function wpsc_purchlog_filter_by() {
 	_wpsc_deprecated_function( __FUNCTION__, '3.8.8' );
-	wpsc_change_purchlog_view( $_POST['view_purchlogs_by'], $_POST['view_purchlogs_by_status'] );
+$allowed_protocols = array('http','https');
+	$allowed_protocols = array('http','https');
+	wpsc_change_purchlog_view( wp_kses($_POST['view_purchlogs_by'],$allowed_html,$allowed_protocols));
+	wp_kses($_POST['view_purchlogs_by_status'],$allowed_html,$allowed_protocols);
 }
 
 /**
