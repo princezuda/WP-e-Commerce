@@ -168,7 +168,7 @@ return $output;
 
 }
 function setting_button(){
-	$next_url	= 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']."?page=wpsc-edit-products";
+	$next_url	= 'http://' . $_SERVER['SERVER_NAME'] . esc_html($_SERVER['PHP_SELF'])."?page=wpsc-edit-products";
 
 // 	$output.="<div><img src='" . plugins_url( WPSC_DIR_NAME . '/images/settings_button.jpg' ) . "' onclick='display_settings_button()'>";
 	$output.="<div style='float: right; margin-top: 0px; position: relative;'> | <a href='#' onclick='display_settings_button(); return false;' style='text-decoration: underline;'>".esc_html__('Settings', 'wpsc')." &raquo;</a>";
